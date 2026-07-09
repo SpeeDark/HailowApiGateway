@@ -1,0 +1,3 @@
+[submodule "HailowProto"]
+	path = HailowProto
+	url = https://github.com/Blackflame796/HailowProto.git
