@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  update-submodules:
+    desc: Updates all Git submodules recursively to their latest remote commits and merges changes.
+    cmds:
+      - git submodule update --remote --merge --recursive

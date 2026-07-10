@@ -1,6 +1,6 @@
-@HailowApiGateway_HostAddress = http://localhost:5213
+@HailowApiGateway_HostAddress = http://localhost:5145
 
-GET {{HailowApiGateway_HostAddress}}/weatherforecast/
+#GET {{HailowApiGateway_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
