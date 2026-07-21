@@ -1,5 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using Grpc.Net.Client;
-using HailowApiGateway.Protos;
+using HailowApiGateway.Protos.AuthService;
 
 namespace HailowApiGateway.Services;
 

@@ -1,5 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using HailowApiGateway.Protos;
+using HailowApiGateway.Protos.AuthService;
 using HailowApiGateway.Services;
 using HailowApiGateway.DTOs;
 
