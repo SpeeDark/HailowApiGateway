@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using HailowApiGateway.Extensions;
 
 namespace HailowApiGateway;
 
@@ -11,22 +12,23 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Configuration.AddEnvironmentVariables();
+        builder.Services.AddAppConfig();
         
-        // Add services to the container.
-
         builder.Services.AddControllers();
+        
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
+        
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
         }
 
+        // gRPC Clients
+        
+        
         app.UseHttpsRedirection();
 
         app.UseAuthorization();

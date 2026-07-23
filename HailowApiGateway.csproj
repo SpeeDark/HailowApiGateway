@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+        <PackageReference Include="DotNetEnv" Version="3.2.0" />
         <PackageReference Include="Google.Protobuf" Version="3.36.0-rc1" />
         <PackageReference Include="Grpc.Net.Client" Version="2.80.0" />
         <PackageReference Include="Grpc.Tools" Version="2.82.0">
