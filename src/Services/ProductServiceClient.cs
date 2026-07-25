@@ -13,9 +13,9 @@ public interface IProductServiceClient
 
 public class ProductServiceClient : IProductServiceClient
 {
-    private readonly Product.ProductClient _client;
+    private readonly ProductService.ProductServiceClient _client;
     
-    public ProductServiceClient(Product.ProductClient client)
+    public ProductServiceClient(ProductService.ProductServiceClient client)
     {
         _client = client;
     }

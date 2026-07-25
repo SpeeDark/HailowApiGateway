@@ -7,8 +7,8 @@ namespace HailowApiGateway.Services;
 
 public interface IAuthServiceClient
 {
-    Task<RegisterResponse> RegisterAsync(RegisterRequest request);
-    Task<LoginResponse> LoginAsync(LoginRequest request);
+    Task<SignUpResponse> SignUpAsync(SignUpRequest request);
+    Task<SignInResponse> SignInAsync(SignInRequest request);
 }
 
 public class AuthServiceClient : IAuthServiceClient
@@ -20,27 +20,27 @@ public class AuthServiceClient : IAuthServiceClient
         _client = client;
     }
 
-    public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
+    public async Task<SignUpResponse> SignUpAsync(SignUpRequest request)
     {
         try
         {
-            return await _client.RegisterAsync(request);
+            return await _client.SignUpAsync(request);
         }
         catch(Grpc.Core.RpcException ex)
         {
-            throw new Exception($"Exception of {nameof(RegisterAsync)}: {ex.Status.Detail}", ex);
+            throw new Exception($"Exception of {nameof(SignUpAsync)}: {ex.Status.Detail}", ex);
         }
     }
 
-    public async Task<LoginResponse> LoginAsync(LoginRequest request)
+    public async Task<SignInResponse> SignInAsync(SignInRequest request)
     {
         try
         {
-            return await _client.LoginAsync(request);
+            return await _client.SignInAsync(request);
         }
         catch(Grpc.Core.RpcException ex)
         {
-            throw new Exception($"Exception of {nameof(LoginAsync)}: {ex.Status.Detail}", ex);
+            throw new Exception($"Exception of {nameof(SignInAsync)}: {ex.Status.Detail}", ex);
         }
     }
 }

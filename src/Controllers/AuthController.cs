@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    public async Task<IActionResult> SignUp([FromBody] RegisterRequestDto request)
     {
         if (
             string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password)
@@ -28,22 +28,22 @@ public class AuthController : ControllerBase
             return BadRequest("Email, password, name are required");
         }
 
-        var grpcRequest = new RegisterRequest
+        var grpcRequest = new SignUpRequest
         {
             Email = request.Email,
-            Password = request.Password,
-            Name = request.Name
+            Password = request.Password
         };
 
         try
         {
-            var response = await _authClient.RegisterAsync(grpcRequest);
+            var response = await _authClient.SignUpAsync(grpcRequest);
 
             return Ok(new
             {
-                UserId = response.UserId,
-                Name = response.Name,
-                Email = response.Email
+                UserId = response.User.Id,
+                Name = $"{response.User.FirstName} {response.User.LastName} ",
+                Email = response.User.Email,
+                Role = response.User.Role
             });;
         }
         catch (Exception ex)
@@ -54,14 +54,14 @@ public class AuthController : ControllerBase
 
 
     [HttpPost]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> SignIn([FromBody] LoginRequestDto request)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
             return BadRequest("Email, password, name are required");
         }
 
-        var grpcRequest = new LoginRequest
+        var grpcRequest = new SignInRequest
         {
             Email = request.Email,
             Password = request.Password
@@ -69,14 +69,16 @@ public class AuthController : ControllerBase
 
         try
         {
-            var response = await _authClient.LoginAsync(grpcRequest);
+            var response = await _authClient.SignInAsync(grpcRequest);
 
             return Ok(new
             {
-                UserId = response.UserId,
-                Email = response.Email,
-                Name = response.Name,
-                Token = response.Token
+                UserId = response.User.Id,
+                Name = $"{response.User.FirstName} {response.User.LastName} ",
+                Email = response.User.Email,
+                Role = response.User.Role,
+                AccessToken = response.Tokens.AccessToken,
+                RefreshToken = response.Tokens.RefreshToken
             });
         }
         catch (Exception ex)
