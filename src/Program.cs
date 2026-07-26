@@ -1,12 +1,16 @@
-using HailowApiGateway.Config;
-using HailowApiGateway.Database;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using HailowApiGateway.Extensions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using HailowApiGateway.Extensions;
+using HailowApiGateway.Services;
+using HailowApiGateway.Config;
+using HailowApiGateway.Database;
+using HailowApiGateway.Protos.AuthService;
+using HailowApiGateway.Protos.ProductService;
 
 namespace HailowApiGateway;
 
@@ -51,6 +55,22 @@ public class Program
             // });
         });
         
+        // gRPC Clients
+        builder.Services.AddGrpcClient<AuthService.AuthServiceClient>((serviceProvider, options) =>
+        {
+            var config = serviceProvider.GetRequiredService<AppConfig>();
+            options.Address = new Uri(config.AuthServiceUrl);
+        });
+        builder.Services.AddGrpcClient<ProductService.ProductServiceClient>((serviceProvider, options) =>
+        {
+            var config = serviceProvider.GetRequiredService<AppConfig>();
+            options.Address = new Uri(config.ProductServiceUrl);
+        });
+        
+        builder.Services.AddScoped<IAuthServiceClient, AuthServiceClient>();
+        builder.Services.AddScoped<IProductServiceClient, ProductServiceClient>();
+        
+        
         builder.Services.AddControllers();
         
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -62,9 +82,6 @@ public class Program
         {
             app.MapOpenApi();
         }
-
-        // gRPC Clients
-        
         
         app.UseHttpsRedirection();
 
