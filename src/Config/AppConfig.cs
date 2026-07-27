@@ -20,10 +20,10 @@ public class AppConfig
     public string RabbitMqHost { get; set; } = string.Empty;
     public int RabbitMqPort { get; set; }
     public string RabbitMqUser { get; set; } = string.Empty;
-    public string RabbitMqPass { get; set; } = string.Empty;
+    public string RabbitMqPassword { get; set; } = string.Empty;
 
     public string RabbitMqConnectionString =>
-        $"amqp://{RabbitMqUser}:{RabbitMqPass}@{RabbitMqHost}:{RabbitMqPort}";
+        $"amqp://{RabbitMqUser}:{RabbitMqPassword}@{RabbitMqHost}:{RabbitMqPort}";
 
     // gRPC service ports
     public int AuthServicePort { get; set; }

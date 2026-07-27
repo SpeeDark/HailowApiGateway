@@ -44,7 +44,7 @@ public class Program
                 cfg.Host(config.RabbitMqHost, "/", host =>
                 {
                     host.Username(config.RabbitMqUser);
-                    host.Password(config.RabbitMqPass);
+                    host.Password(config.RabbitMqPassword);
                 });
             });
             

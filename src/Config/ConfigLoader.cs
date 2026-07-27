@@ -24,15 +24,15 @@ public static class ConfigLoader
             // PostgreSQL
             PostgresHost = GetEnv("POSTGRES_HOST"),
             PostgresPort = GetEnvInt("POSTGRES_PORT"),
-            PostgresUser = GetEnv("POSTGRES_USER"),
+            PostgresUser = GetEnv("POSTGRES_USERNAME"),
             PostgresPassword = GetEnv("POSTGRES_PASSWORD"),
-            PostgresDb = GetEnv("POSTGRES_DB"),
+            PostgresDb = GetEnv("POSTGRES_DATABASE"),
 
             // RabbitMQ
             RabbitMqHost = GetEnv("RABBITMQ_HOST"),
             RabbitMqPort = GetEnvInt("RABBITMQ_PORT"),
-            RabbitMqUser = GetEnv("RABBITMQ_USER"),
-            RabbitMqPass = GetEnv("RABBITMQ_PASS"),
+            RabbitMqUser = GetEnv("RABBITMQ_USERNAME"),
+            RabbitMqPassword = GetEnv("RABBITMQ_PASSWORD"),
 
             // Ports
             AuthServicePort = authServicePort,
