@@ -19,7 +19,7 @@ public class ProductController : ControllerBase
         _productClient = productClient;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateRequestDto request)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.CategoryId))

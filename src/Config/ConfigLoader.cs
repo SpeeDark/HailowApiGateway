@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using DotNetEnv;
 
 namespace HailowApiGateway.Config;
@@ -7,8 +8,10 @@ public static class ConfigLoader
 {
     public static AppConfig Load()
     {
-        Env.Load();
-
+        if (File.Exists(".env"))
+            Env.Load();
+        else Console.WriteLine("No .env file found.");
+        
         int authServicePort = GetEnvInt("AUTH_SERVICE_PORT");
         int productServicePort = GetEnvInt("PRODUCT_SERVICE_PORT");
         int cartServicePort = GetEnvInt("CART_SERVICE_PORT");

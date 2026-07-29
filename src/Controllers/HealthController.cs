@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MassTransit;
@@ -22,7 +21,7 @@ public class HealthController : ControllerBase
         _config = config;
     }
 
-    [HttpGet]
+    [HttpGet("check")]
     public async Task<IActionResult> Check()
     {
         var result = new
@@ -43,7 +42,6 @@ public class HealthController : ControllerBase
     {
         try
         {
-            // Пробуем отправить тестовое сообщение
             await _bus.Publish(new { Test = "HealthCheck" });
             return true;
         }

@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
         _authClient = authClient;
     }
 
-    [HttpPost]
+    [HttpPost("signup")]
     public async Task<IActionResult> SignUp([FromBody] RegisterRequestDto request)
     {
         if (
@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] LoginRequestDto request)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))

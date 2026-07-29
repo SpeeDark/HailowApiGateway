@@ -1,11 +1,9 @@
 using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using HailowApiGateway.Extensions;
 using HailowApiGateway.Services;
 using HailowApiGateway.Config;
 using HailowApiGateway.Database;
@@ -21,12 +19,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         
         // Configuration
-        builder.Services.AddAppConfig();
+        var config = ConfigLoader.Load();
+        builder.Services.AddSingleton(config);
         
         // Postgres
-        builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+        builder.Services.AddDbContext<AppDbContext>((options) =>
         {
-            var config = serviceProvider.GetRequiredService<AppConfig>();
             options.UseNpgsql(config.PostgresConnectionString);
         });
         
@@ -39,8 +37,6 @@ public class Program
 
             x.UsingRabbitMq((context, cfg) =>
             {
-                var config = context.GetRequiredService<AppConfig>();
-
                 cfg.Host(config.RabbitMqHost, "/", host =>
                 {
                     host.Username(config.RabbitMqUser);
@@ -58,12 +54,10 @@ public class Program
         // gRPC Clients
         builder.Services.AddGrpcClient<AuthService.AuthServiceClient>((serviceProvider, options) =>
         {
-            var config = serviceProvider.GetRequiredService<AppConfig>();
             options.Address = new Uri(config.AuthServiceUrl);
         });
         builder.Services.AddGrpcClient<ProductService.ProductServiceClient>((serviceProvider, options) =>
         {
-            var config = serviceProvider.GetRequiredService<AppConfig>();
             options.Address = new Uri(config.ProductServiceUrl);
         });
         
@@ -84,9 +78,7 @@ public class Program
         }
         
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-        
         app.MapControllers();
 
         app.Run();
