@@ -107,8 +107,9 @@ public class Program
 
         // Customer Middleware
         app.UseWhen(
-            context => context.Request.Path.StartsWithSegments("/cart") ||
-                       context.Request.Path.StartsWithSegments("/order"),
+            context => (context.Request.Path.StartsWithSegments("/cart") ||
+                        context.Request.Path.StartsWithSegments("/order") ||
+                        context.Request.Path.StartsWithSegments("/auth/profile")),
             appBuilder =>
             {
                 appBuilder.UseMiddleware<JwtValidationCustomerMiddleware>();

@@ -177,13 +177,13 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPut("profile")]
+    [HttpPut("profile/{id}")]
     [Ownership]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequestDto request)
+    public async Task<IActionResult> UpdateProfile(string id, [FromBody] UpdateProfileRequestDto request)
     {
         var grpcRequest = new UpdateProfileRequest
         {
-            Id = request.UserId,
+            Id = id,
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -212,13 +212,13 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPut("profile/delivery")]
+    [HttpPut("profile/{id}/delivery")]
     [Ownership]
-    public async Task<IActionResult> UpdateDeliveryInfo([FromBody] UpdateDeliveryInfoRequestDto request)
+    public async Task<IActionResult> UpdateDeliveryInfo(string id, [FromBody] UpdateDeliveryInfoRequestDto request)
     {
         var grpcRequest = new UpdateDeliveryInfoRequest
         {
-            Id = request.UserId,
+            Id = id,
             City = request.City,
             Street = request.Street,
             Building = request.Building,
@@ -257,9 +257,9 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("profile/avatar/upload")]
+    [HttpPost("profile/{id}/avatar/upload")]
     [Ownership]
-    public async Task<IActionResult> UploadAvatarFromFile([FromForm] UploadAvatarFileRequestDto request)
+    public async Task<IActionResult> UploadAvatarFromFile(string id, [FromForm] UploadAvatarFileRequestDto request)
     {
         byte[] avatarData;
         using (var ms = new MemoryStream())
@@ -270,7 +270,7 @@ public class AuthController : ControllerBase
 
         var grpcRequest = new UploadAvatarRequest
         {
-            UserId = request.UserId,
+            UserId = id,
             AvatarImage = Google.Protobuf.ByteString.CopyFrom(avatarData)
         };
 

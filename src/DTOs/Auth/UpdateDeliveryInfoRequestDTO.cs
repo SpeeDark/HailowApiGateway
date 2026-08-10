@@ -4,9 +4,6 @@ namespace HailowApiGateway.DTOs.Auth;
 
 public class UpdateDeliveryInfoRequestDto
 {
-    [Required(ErrorMessage = "User ID is required")]
-    public string UserId { get; set; } = string.Empty;
-    
     [Required(ErrorMessage = "City is required")]
     public string City { get; set; } = string.Empty;
     

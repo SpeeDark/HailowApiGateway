@@ -4,9 +4,6 @@ namespace HailowApiGateway.DTOs.Auth;
 
 public class UpdateProfileRequestDto
 {
-    [Required(ErrorMessage = "User ID is required")]
-    public string UserId { get; set; } = string.Empty;
-    
     [Required(ErrorMessage = "First name is required")]
     public string FirstName { get; set; } = string.Empty;
     

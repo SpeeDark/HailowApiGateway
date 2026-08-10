@@ -15,8 +15,10 @@ public class JwtValidationCustomerMiddleware : IMiddleware
     private static readonly string[] PublicPaths = 
     {
         "/health",
-        "/api/auth/login",
-        "/api/auth/register",
+        "/auth/login",
+        "/auth/register",
+        "/auth/logout",
+        "/auth/refresh",
         "/swagger",
         "/openapi"
     };
