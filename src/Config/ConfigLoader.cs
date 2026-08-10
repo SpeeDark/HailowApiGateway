@@ -21,16 +21,22 @@ public static class ConfigLoader
         return new AppConfig
         {
             // JWT
-            JwtAccessSecret = GetEnv("JWT_ACCESS_KEY"),
-            JwtRefreshSecret = GetEnv("JWT_REFRESH_KEY"),
+            JwtAccessSecretCustomer = GetEnv("JWT_ACCESS_KEY_CUSTOMER"),
+            JwtRefreshSecretCustomer = GetEnv("JWT_REFRESH_KEY_CUSTOMER"),
+            JwtAccessSecretSeller = GetEnv("JWT_ACCESS_KEY_SELLER"),
+            JwtRefreshSecretSeller = GetEnv("JWT_REFRESH_KEY_SELLER"),
             
             // PostgreSQL
             PostgresHost = GetEnv("POSTGRES_HOST"),
             PostgresPort = GetEnvInt("POSTGRES_PORT"),
-            PostgresUser = GetEnv("POSTGRES_USERNAME"),
+            PostgresUser = GetEnv("POSTGRES_USER"),
             PostgresPassword = GetEnv("POSTGRES_PASSWORD"),
-            PostgresDb = GetEnv("POSTGRES_DATABASE"),
+            PostgresDb = GetEnv("POSTGRES_DB"),
 
+            // Redis
+            RedisHost = GetEnv("REDIS_HOST"),
+            RedisPort = GetEnvInt("REDIS_PORT"),
+            
             // RabbitMQ
             RabbitMqHost = GetEnv("RABBITMQ_HOST"),
             RabbitMqPort = GetEnvInt("RABBITMQ_PORT"),

@@ -2,11 +2,15 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using HailowApiGateway.Services;
 using HailowApiGateway.Config;
 using HailowApiGateway.Database;
+using HailowApiGateway.Middlewares;
 using HailowApiGateway.Protos.AuthService;
 using HailowApiGateway.Protos.ProductService;
 
@@ -26,6 +30,16 @@ public class Program
         builder.Services.AddDbContext<AppDbContext>((options) =>
         {
             options.UseNpgsql(config.PostgresConnectionString);
+        });
+        
+        // Redis
+        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var cfg = ConfigurationOptions.Parse(
+                config.RedisConnectionString
+            );
+            cfg.AbortOnConnectFail = false;
+            return ConnectionMultiplexer.Connect(cfg);
         });
         
         // RabbitMQ
@@ -63,7 +77,11 @@ public class Program
         
         builder.Services.AddScoped<IAuthServiceClient, AuthServiceClient>();
         builder.Services.AddScoped<IProductServiceClient, ProductServiceClient>();
-        
+        builder.Services.AddScoped<IRedisServiceClient, RedisServiceClient>();
+        builder.Services.AddScoped<IJwtValidationCustomerService, JwtValidationCustomerService>();
+        builder.Services.AddScoped<IJwtValidationSellerService, JwtValidationSellerService>();
+        builder.Services.AddScoped<JwtValidationCustomerMiddleware>();
+        builder.Services.AddScoped<JwtValidationSellerMiddleware>();
         
         builder.Services.AddControllers();
         
@@ -76,6 +94,26 @@ public class Program
         {
             app.MapOpenApi();
         }
+        
+        // Seller Middleware
+        app.UseWhen(
+            context => context.Request.Path.StartsWithSegments("/seller") ||
+                       context.Request.Path.StartsWithSegments("/product"),
+            appBuilder =>
+            {
+                appBuilder.UseMiddleware<JwtValidationSellerMiddleware>();
+            }
+        );
+
+        // Customer Middleware
+        app.UseWhen(
+            context => context.Request.Path.StartsWithSegments("/cart") ||
+                       context.Request.Path.StartsWithSegments("/order"),
+            appBuilder =>
+            {
+                appBuilder.UseMiddleware<JwtValidationCustomerMiddleware>();
+            }
+        );
         
         app.UseHttpsRedirection();
         app.UseAuthorization();

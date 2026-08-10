@@ -3,9 +3,12 @@ namespace HailowApiGateway.Config;
 public class AppConfig
 {
     // Jwt
-    public string JwtRefreshSecret { get; set; } = string.Empty;
-    public string JwtAccessSecret { get; set; } = string.Empty;
+    public string JwtRefreshSecretCustomer { get; set; } = string.Empty;
+    public string JwtAccessSecretCustomer { get; set; } = string.Empty;
+    public string JwtRefreshSecretSeller { get; set; } = string.Empty;
+    public string JwtAccessSecretSeller { get; set; } = string.Empty;
 
+    
     // PostgreSQL
     public string PostgresHost { get; set; } = string.Empty;
     public int PostgresPort { get; set; }
@@ -15,7 +18,13 @@ public class AppConfig
 
     public string PostgresConnectionString =>
         $"Host={PostgresHost};Port={PostgresPort};Database={PostgresDb};Username={PostgresUser};Password={PostgresPassword}";
-
+    
+    // Redis
+    public string RedisHost { get; set; } = string.Empty;
+    public int RedisPort { get; set; }
+    
+    public string RedisConnectionString => $"{RedisHost}:{RedisPort}";
+    
     // RabbitMQ
     public string RabbitMqHost { get; set; } = string.Empty;
     public int RabbitMqPort { get; set; }

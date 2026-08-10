@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HailowApiGateway.Protos.ProductService;
 using HailowApiGateway.Services;
-using HailowApiGateway.DTOs;
+using HailowApiGateway.DTOs.Product;
 using HailowApiGateway.Protos.ProductService.Types;
 
 namespace HailowApiGateway.Controllers;
@@ -22,7 +22,7 @@ public class ProductController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateRequestDto request)
     {
-        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.CategoryId))
+        if (string.IsNullOrEmpty(request.Title) || string.IsNullOrEmpty(request.CategoryId))
         {
             return BadRequest("Necessary params are required");
         }
@@ -31,8 +31,8 @@ public class ProductController : ControllerBase
         {
             Product = new ProductDraft
             {
-                Name = request.Name,
-                Category = new Category { Id = request.CategoryId, Name = request.Name },
+                Name = request.Title,
+                Category = new Category { Id = request.CategoryId, Title = request.Title },
             }
         };
 
