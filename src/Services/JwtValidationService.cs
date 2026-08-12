@@ -39,7 +39,7 @@ public abstract class BaseJwtValidationService : IJwtValidationService
         string signingKey,
         string issuer,
         string audience,
-        int cacheDurationMinutes = 10,
+        int cacheDurationMinutes = 5,
         string tokenBlacklistKeyPrefix = "token:blacklist",
         string tokenValidKeyPrefix = "token:valid")
     {
@@ -93,11 +93,14 @@ public abstract class BaseJwtValidationService : IJwtValidationService
             return result;
         }
 
-        var role = principal.FindFirst("role")?.Value?.ToLowerInvariant() ??
-                   principal.FindFirst("Role")?.Value?.ToLowerInvariant();
+        var role = principal.FindFirst(ClaimTypes.Role)?.Value ??
+                   principal.FindFirst("role")?.Value ??
+                   principal.FindFirst("Role")?.Value;
         var userId = principal.FindFirst("id")?.Value ??
-                 principal.FindFirst("ID")?.Value;
-        var email = principal.FindFirst("email")?.Value ??
+                 principal.FindFirst("ID")?.Value ??
+                 principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = principal.FindFirst(ClaimTypes.Email)?.Value ??
+                    principal.FindFirst("email")?.Value ??
                     principal.FindFirst("Email")?.Value;
         
         var claims = new Dictionary<string, string>();
@@ -115,7 +118,7 @@ public abstract class BaseJwtValidationService : IJwtValidationService
         result.Email = email;
         result.Claims = claims;
 
-        Console.WriteLine($"Token validated successfully. Role: {role}, UserId: {userId}");
+        Console.WriteLine($"Token validated successfully.\nRole: {role},\nUserId: {userId},\nEmail: {email}");
         return result;
     }
 
@@ -129,14 +132,14 @@ public abstract class BaseJwtValidationService : IJwtValidationService
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true,
+                ValidateIssuer = false,//true,
                 ValidIssuer = _issuer,
-                ValidateAudience = true,
+                ValidateAudience = false,//true,
                 ValidAudience = _audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
-                NameClaimType = "Email",
-                RoleClaimType = "Role"
+                NameClaimType = "email",
+                RoleClaimType = "role"
             };
 
             var principal = _tokenHandler.ValidateToken(token, tokenValidationParams, out _);
