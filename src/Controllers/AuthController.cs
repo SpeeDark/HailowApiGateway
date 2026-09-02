@@ -58,6 +58,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
+            throw;
             return BadRequest(new { Error = ex.Message} );
         }
     }
@@ -114,10 +115,7 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout([FromBody] LogoutRequestDto request)
     {
-        var grpcRequest = new LogoutRequest
-        {
-            RefreshToken = request.RefreshToken
-        };
+        var grpcRequest = new LogoutRequest { };
 
         try
         {
