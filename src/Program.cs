@@ -10,6 +10,7 @@ using StackExchange.Redis;
 using HailowApiGateway.Services;
 using HailowApiGateway.Config;
 using HailowApiGateway.Database;
+using HailowApiGateway.Interceptors;
 using HailowApiGateway.Middlewares;
 using HailowApiGateway.Protos.AuthService;
 using HailowApiGateway.Protos.ProductService;
@@ -20,10 +21,14 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        // AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+        
         var builder = WebApplication.CreateBuilder(args);
         
         // Configuration
         var config = ConfigLoader.Load();
+        Console.WriteLine(config.JwtRefreshSecretCustomer);
+        Console.WriteLine(config.JwtAccessSecretCustomer);
         builder.Services.AddSingleton(config);
         
         // Postgres
@@ -65,15 +70,20 @@ public class Program
             // });
         });
         
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<MetadataInterceptor>();
+        
         // gRPC Clients
         builder.Services.AddGrpcClient<AuthService.AuthServiceClient>((serviceProvider, options) =>
         {
             options.Address = new Uri(config.AuthServiceUrl);
-        });
+        }).AddInterceptor<MetadataInterceptor>();
+        
         builder.Services.AddGrpcClient<ProductService.ProductServiceClient>((serviceProvider, options) =>
         {
             options.Address = new Uri(config.ProductServiceUrl);
         });
+        
         
         builder.Services.AddScoped<IAuthServiceClient, AuthServiceClient>();
         builder.Services.AddScoped<IProductServiceClient, ProductServiceClient>();
