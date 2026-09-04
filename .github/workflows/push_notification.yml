@@ -15,4 +15,4 @@ jobs:
           message: |
             ${{ github.actor }} pushed to ${{ github.ref_name }}
             Repository: ${{ github.event.repository.name }}
-            Commits (${{ github.event.commits.length }}): ${{ join(github.event.commits.*.message, '\n') }}
+            Commits: ${{ join(github.event.commits.*.message, '\n') }}
