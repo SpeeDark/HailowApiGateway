@@ -1,0 +1,58 @@
+name: CI - API Gateway
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/HailowApiGateway.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore HailowApiGateway/HailowApiGateway.csproj
+      
+      - name: Build project
+        run: dotnet build HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-restore
+      
+      # - name: Run tests
+      #   run: dotnet test HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-build --verbosity normal
+
+      # - name: Publish application
+      #   run: dotnet publish HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-build --output ./publish
+      
+      # - name: Upload build artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: HailowApiGateway
+      #     path: ./publish
+      #     ratention-days: 7
