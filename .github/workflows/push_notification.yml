@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Format commit messages
-          id: format_commits
-          run: |
-            COMMITS=$(echo '${{ toJson(github.event.commits.*.message) }}' | jq -r '.[]')
-            
-            echo "COMMITS<<EOF" >> $GITHUB_OUTPUT
-            echo "$COMMITS" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+        id: format_commits
+        run: |
+          COMMITS=$(echo '${{ toJson(github.event.commits.*.message) }}' | jq -r '.[]')
+          
+          echo "COMMITS<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Telegram Message
         uses: appleboy/telegram-action@master

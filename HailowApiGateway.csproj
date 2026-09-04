@@ -32,7 +32,7 @@
 
     <ItemGroup>
       <Content Include=".github\workflows\ci.yml" />
-      <Content Include=".github\workflows\test.yml" />
+      <Content Include=".github\workflows\push_notification.yml" />
     </ItemGroup>
 
 </Project>
