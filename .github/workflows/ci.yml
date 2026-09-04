@@ -39,16 +39,16 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
-        run: dotnet restore HailowApiGateway/HailowApiGateway.csproj
+        run: dotnet restore HailowApiGateway.csproj
       
       - name: Build project
-        run: dotnet build HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-restore
+        run: dotnet build HailowApiGateway.csproj --configuration Release --no-restore
       
       # - name: Run tests
-      #   run: dotnet test HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-build --verbosity normal
+      #   run: dotnet test HailowApiGateway.csproj --configuration Release --no-build --verbosity normal
 
       # - name: Publish application
-      #   run: dotnet publish HailowApiGateway/HailowApiGateway.csproj --configuration Release --no-build --output ./publish
+      #   run: dotnet publish HailowApiGateway.csproj --configuration Release --no-build --output ./publish
       
       # - name: Upload build artifact
       #   uses: actions/upload-artifact@v4
